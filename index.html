@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Birthday Surprise</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+    <meta name="description" content="Kado spesial untuk yang tersayang. Buka amplopnya dan temukan kejutan di dalamnya!">
+    <meta name="keywords" content="Birthday Surprise, Kado Digital, Ucapan Ulang Tahun">
+    <meta name="author" content="Farghani Dev">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://domain-kamu.com/">
+    <meta property="og:title" content="Special Birthday Surprise for You! ✨">
+    <meta property="og:description" content="Ada pesan rahasia dan kado spesial yang menantimu. Klik untuk membuka!">
+    <meta property="og:image" content="https://domain-kamu.com/assets/thumbnail-preview.png"> 
+
+    <link rel="icon" href="https://domain-kamu.com/assets/favicon.ico" type="image/x-icon">
+
+    <style>
+        :root {
+            --pink-soft: #FFB6C1;
+            --gold: #D4AF37;
+            --rose-gold: #E5B3A6;
+        }
+
+        body {
+            background-color: #FFF0F5;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .cursive { font-family: 'Dancing Script', cursive; }
+
+        /* Floating Background Elements */
+        .floating-element {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        /* Phase Styling */
+        .hidden-section { display: none; opacity: 0; }
+
+        /* Envelope Logic */
+        .envelope-wrapper { perspective: 1000px; cursor: pointer; }
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background: var(--pink-soft);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f8a5b3;
+            clip-path: polygon(0 0, 100% 0, 50% 50%);
+            transform-origin: top;
+            z-index: 3;
+        }
+        .letter {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 90%;
+            height: 80%;
+            background: white;
+            z-index: 2;
+            padding: 20px;
+            text-align: center;
+        }
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--pink-soft);
+            clip-path: polygon(0 40%, 50% 100%, 100% 40%, 100% 100%, 0 100%);
+            z-index: 4;
+            border-radius: 0 0 10px 10px;
+        }
+
+        #gift-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            margin: 20px 0;
+            z-index: 40;
+        }
+
+        .gift-box {
+            cursor: pointer;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+            font-size: 2.5rem;
+            user-select: none;
+            position: relative;
+        }
+
+        #voucher-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .voucher-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 2rem;
+            text-align: center;
+            border: 5px dashed var(--gold);
+            position: relative;
+            max-width: 350px;
+            box-shadow: 0 0 30px var(--pink-soft);
+        }
+
+        .gold-input {
+            border: 2px solid var(--gold);
+            background: rgba(255,255,255,0.9);
+            transition: all 0.3s ease;
+        }
+        .gold-input:focus {
+            outline: none;
+            border-color: #FF69B4;
+            box-shadow: 0 0 15px var(--pink-soft);
+        }
+
+        /* Music Controls */
+        #music-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 999;
+            background: white;
+            border: 2px solid var(--pink-soft);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bdayMusic" loop>
+        <source src="/Jamrud - Selamat Ulang Tahun (Lirik).mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-btn" onclick="toggleMusic()">
+        <span id="music-icon" class="text-xl">🎵</span>
+    </div>
+
+    <div id="bg-elements"></div>
+
+    <section id="setup-section" class="h-screen w-full flex flex-col items-center justify-center p-6 text-center relative z-10">
+        <div class="max-w-md w-full bg-white/80 backdrop-blur-sm p-10 rounded-[3rem] shadow-2xl border-b-8 border-[#D4AF37]">
+            <h2 class="cursive text-4xl text-[#FF69B4] mb-2">Birthday Surprise</h2>
+            <p class="text-xs tracking-widest text-gray-400 mb-8 uppercase">Digital Gift Experience</p>
+            
+            <input type="text" id="userName" placeholder="Nama Istri/Pasangan..." 
+                    class="gold-input w-full p-4 rounded-2xl text-center mb-6 text-lg font-semibold text-gray-700">
+            
+            <button onclick="generateSurprise()" 
+                    class="bg-[#D4AF37] text-white w-full py-4 rounded-2xl font-bold hover:bg-[#b8952d] transition-all active:scale-95 shadow-lg uppercase tracking-wider">
+                Buka Hadiah
+            </button>
+        </div>
+    </section>
+
+    <section id="entrance" class="hidden-section h-screen w-full flex items-center justify-center flex-col gap-8 relative z-10">
+        <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope">
+                <div class="envelope-flap" id="flap"></div>
+                <div class="envelope-front"></div>
+                <div class="letter" id="letter">
+                    <p id="envelopeLabel" class="text-pink-500 font-bold mt-[3.2rem] cursive text-2xl"></p>
+                </div>
+            </div>
+            <div class="mt-28 text-center">
+                <p class="text-pink-400 font-bold tracking-[0.3em] animate-pulse">KLIK AMPLOPNYA</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="main-content" class="hidden-section min-h-screen w-full flex flex-col items-center py-20 px-6 relative z-10">
+        <h2 class="text-gold tracking-[0.4em] uppercase text-xs mb-4 font-bold text-[#D4AF37]">Happy Birthday To</h2>
+        <h1 id="display-name" class="text-5xl md:text-7xl text-[#FF69B4] text-center mb-12 font-bold leading-tight"></h1>
+
+        <div class="max-w-2xl w-full bg-white/60 backdrop-blur-lg p-8 md:p-12 rounded-[2.5rem] shadow-2xl border-l-[12px] border-[#D4AF37] relative">
+            <div id="message" class="text-lg md:text-xl leading-relaxed text-gray-700 italic mb-8 min-h-[150px]"></div>
+            <p class="text-right font-bold text-[#D4AF37] tracking-widest">- Selamanya Milikmu -</p>
+        </div>
+
+        <p id="instruction" class="hidden text-[10px] text-gold font-bold tracking-widest uppercase animate-bounce mt-8">Ketuk kado yang melayang! ✨</p>
+        <div id="gift-container"></div>
+
+        <div class="relative">
+            <div class="absolute -inset-4 bg-pink-200 rounded-full blur-2xl opacity-40 animate-pulse"></div>
+            <div class="relative w-32 h-32 rounded-full border-4 border-white shadow-2xl bg-white flex items-center justify-center">
+                <svg class="text-pink-400 fill-current w-16 h-16" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+        </div>
+
+        <footer class="mt-auto py-6 text-center">
+            <p class="text-[10px] text-gray-400 tracking-[0.3em] uppercase">Made with ❤️ for my beloved wife</p>
+            <p class="text-[9px] text-gray-300 mt-1 uppercase tracking-widest">© 2026 Digital Gift Experience</p>
+        </footer>
+    </section>
+
+    <div id="voucher-modal" onclick="closeVoucher()">
+        <div class="voucher-card" id="v-card" onclick="event.stopPropagation()">
+            <div class="text-5xl mb-4">Selamat!</div>
+            <h3 class="text-gold uppercase tracking-widest font-bold text-sm mb-2">Kamu Mendapatkan</h3>
+            <p id="voucher-text" class="text-[#FF69B4] font-bold text-3xl cursive py-4"></p>
+            <div class="h-[1px] w-full bg-gray-100 my-4"></div>
+            <p class="text-[10px] text-gray-400 uppercase tracking-tighter">Tunjukkan layar ini ke suami untuk klaim!</p>
+            <button onclick="closeVoucher()" class="mt-6 text-gray-400 text-xs hover:text-pink-500 transition-colors">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        window.onbeforeunload = function() { window.scrollTo(0,0); };
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+
+        let targetName = "";
+        const voucherList = [
+            "Pijat Punggung 30 Menit 💆‍♀️",
+            "Bebas Cuci Piring Seharian 🍽️",
+            "Makan Malam Romantis 🕯️",
+            "Saldo Jajan Tambahan 💸",
+            "Voucher Peluk Seharian 🤗",
+            "Nonton Film Pilihanmu 🎬"
+        ];
+
+        function initBackground() {
+            const bg = document.getElementById('bg-elements');
+            const icons = ['💖', '✨', '🌸', '❄️'];
+            for(let i = 0; i < 20; i++) {
+                const div = document.createElement('div');
+                div.className = 'floating-element';
+                div.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                div.style.left = Math.random() * 100 + 'vw';
+                div.style.top = Math.random() * 100 + 'vh';
+                div.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                div.style.color = i % 2 === 0 ? '#FFB6C1' : '#D4AF37';
+                bg.appendChild(div);
+                gsap.to(div, { 
+                    y: "-100vh", 
+                    x: "random(-50, 50)",
+                    rotation: 360, 
+                    duration: Math.random() * 15 + 10, 
+                    repeat: -1, 
+                    ease: "none", 
+                    delay: -Math.random() * 20 
+                });
+            }
+        }
+        initBackground();
+
+        window.onload = () => {
+            window.scrollTo(0,0);
+            const urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.has('name')) {
+                let rawName = urlParams.get('name');
+                let formattedName = rawName.toLowerCase().split(' ').map(word => {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                }).join(' ');
+                
+                document.getElementById('userName').value = formattedName;
+            }
+        };
+
+        function toggleMusic() {
+            const music = document.getElementById("bdayMusic");
+            const icon = document.getElementById("music-icon");
+            if(music.paused) {
+                music.play();
+                icon.innerText = "🎵";
+            } else {
+                music.pause();
+                icon.innerText = "🔇";
+            }
+        }
+
+        function generateSurprise() {
+            const input = document.getElementById('userName');
+            if(input.value.trim() === "") {
+                gsap.to(input, { x: 10, repeat: 5, yoyo: true, duration: 0.05 });
+                return;
+            }
+            const music = document.getElementById("bdayMusic");
+            music.play().catch(e => console.log("Audio play failed"));
+            targetName = input.value;
+            document.getElementById('envelopeLabel').innerText = "Untuk: " + targetName;
+            document.getElementById('display-name').innerText = targetName;
+            gsap.to("#setup-section", { 
+                opacity: 0, 
+                y: -50, 
+                duration: 0.8, 
+                onComplete: () => {
+                    document.getElementById("setup-section").style.display = "none";
+                    const entrance = document.getElementById("entrance");
+                    entrance.style.display = "flex";
+                    gsap.fromTo(entrance, { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 1, ease: "back.out(1.7)" });
+                }
+            });
+        }
+
+        function openEnvelope() {
+            const music = document.getElementById("bdayMusic");
+            music.play().catch(() => {});
+            const tl = gsap.timeline();
+            tl.to("#flap", { rotateX: 180, duration: 0.7, ease: "power2.inOut" })
+                .to("#letter", { y: -120, zIndex: 10, duration: 0.8, ease: "back.out(1.2)" }, "-=0.2")
+                .to("#entrance", { 
+                    opacity: 0, 
+                    filter: "blur(15px)", 
+                    duration: 1, 
+                    delay: 0.3,
+                    onComplete: () => {
+                        document.getElementById("entrance").style.display = "none";
+                        const main = document.getElementById("main-content");
+                        main.style.display = "flex";
+                        gsap.fromTo(main, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, onComplete: finalCelebration });
+                    }
+            });
+        }
+
+        function finalCelebration() {
+            const end = Date.now() + (4 * 1000);
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#FFB6C1', '#D4AF37'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#FFB6C1', '#D4AF37'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+            
+            const messageStr = `Di hari yang istimewa ini, biarkan semesta bersaksi atas betapa indahnya keberadaanmu, ${targetName}. Seperti embun yang menyejukkan pagi, kehadiranmu adalah jawaban atas setiap doa-doaku. Terima kasih telah menjadi pelangi di setiap badai, dan menjadi rumah di setiap lelahku. Semoga Allah melimpahkan segala kebahagiaan untukmu.`;
+            
+            let i = 0;
+            const container = document.getElementById("message");
+            container.innerHTML = "";
+
+            function type() {
+                if (i < messageStr.length) {
+                    container.innerHTML += messageStr.charAt(i);
+                    i++;
+                    setTimeout(type, 30);
+                } else {
+                    spawnGiftBoxes();
+                    document.getElementById('instruction').classList.remove('hidden');
+                }
+            }
+            type();
+        }
+
+        // PERBAIKAN: Fungsi spawn kado dalam Flexbox horizontal
+        function spawnGiftBoxes() {
+            const container = document.getElementById('gift-container');
+            for(let j = 0; j < 5; j++) {
+                const gift = document.createElement('div');
+                gift.className = 'gift-box';
+                gift.innerHTML = '🎁';
+                container.appendChild(gift);
+
+                gsap.from(gift, { scale: 0, rotation: 360, duration: 0.8, delay: j * 0.2, ease: "back.out(1.7)" });
+                gsap.to(gift, { y: "-=10", repeat: -1, yoyo: true, duration: 1 + (j * 0.2), ease: "power1.inOut" });
+
+                gift.onclick = (e) => openVoucher(gift, e);
+            }
+        }
+
+        function openVoucher(el, event) {
+            confetti({ 
+                particleCount: 40, 
+                spread: 60, 
+                origin: { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight } 
+            });
+            
+            const randomV = voucherList[Math.floor(Math.random() * voucherList.length)];
+            document.getElementById("voucher-text").innerText = randomV;
+            
+            document.getElementById("voucher-modal").style.display = "flex";
+            gsap.fromTo("#v-card", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" });
+            
+            el.remove();
+        }
+
+        function closeVoucher() {
+            gsap.to("#v-card", { scale: 0.5, opacity: 0, duration: 0.3, onComplete: () => {
+                document.getElementById("voucher-modal").style.display = "none";
+            }});
+        }
+    </script>
+</body>
+</html>
