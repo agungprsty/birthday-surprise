@@ -205,7 +205,7 @@
         </div>
     </section>
 
-    <section id="main-content" class="hidden-section min-h-screen w-full flex flex-col items-center py-20 px-6 relative z-10">
+    <section id="main-content" class="hidden-section min-h-screen w-full flex flex-col items-center pt-[3rem] pb-20 px-6 relative z-10">
         <h2 class="text-gold tracking-[0.4em] uppercase text-xs mb-4 font-bold text-[#D4AF37]">Happy Birthday To</h2>
         <h1 id="display-name" class="text-5xl md:text-7xl text-[#FF69B4] text-center mb-8 font-bold leading-tight"></h1>
 
@@ -349,7 +349,7 @@
         }
 
         function finalCelebration() {
-            const end = Date.now() + (6 * 1000);
+            const end = Date.now() + (5 * 1000);
             (function frame() {
                 confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#FFB6C1', '#D4AF37'] });
                 confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#FFB6C1', '#D4AF37'] });
