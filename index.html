@@ -16,12 +16,12 @@
     <meta name="author" content="Farghani Dev">
 
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://domain-kamu.com/">
+    <meta property="og:url" content="https://agungprsty.github.io/birthday-surprise/">
     <meta property="og:title" content="Special Birthday Surprise for You! ✨">
     <meta property="og:description" content="Ada pesan rahasia dan kado spesial yang menantimu. Klik untuk membuka!">
-    <meta property="og:image" content="https://domain-kamu.com/assets/thumbnail-preview.png"> 
+    <meta property="og:image" content="https://agungprsty.github.io/birthday-surprise/assets/thumbnail-preview.png"> 
 
-    <link rel="icon" href="https://domain-kamu.com/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="https://agungprsty.github.io/birthday-surprise/assets/favicon.ico" type="image/x-icon">
 
     <style>
         :root {
@@ -166,7 +166,7 @@
 <body>
 
     <audio id="bdayMusic" loop>
-        <source src="/Jamrud - Selamat Ulang Tahun (Lirik).mp3" type="audio/mpeg">
+        <source src="/assets/Jamrud - Selamat Ulang Tahun (Lirik).mp3" type="audio/mpeg">
     </audio>
 
     <div id="music-btn" onclick="toggleMusic()">
@@ -180,7 +180,7 @@
             <h2 class="cursive text-4xl text-[#FF69B4] mb-2">Birthday Surprise</h2>
             <p class="text-xs tracking-widest text-gray-400 mb-8 uppercase">Digital Gift Experience</p>
             
-            <input type="text" id="userName" placeholder="Nama Istri/Pasangan..." 
+            <input type="text" id="userName" placeholder="Nama Kamu" 
                     class="gold-input w-full p-4 rounded-2xl text-center mb-6 text-lg font-semibold text-gray-700">
             
             <button onclick="generateSurprise()" 
@@ -200,18 +200,18 @@
                 </div>
             </div>
             <div class="mt-28 text-center">
-                <p class="text-pink-400 font-bold tracking-[0.3em] animate-pulse">KLIK AMPLOPNYA</p>
+                <p class="text-pink-400 font-bold tracking-[0.3em] animate-pulse text-xs">KETUK UNTUK MEMBACA PESAN</p>
             </div>
         </div>
     </section>
 
     <section id="main-content" class="hidden-section min-h-screen w-full flex flex-col items-center py-20 px-6 relative z-10">
         <h2 class="text-gold tracking-[0.4em] uppercase text-xs mb-4 font-bold text-[#D4AF37]">Happy Birthday To</h2>
-        <h1 id="display-name" class="text-5xl md:text-7xl text-[#FF69B4] text-center mb-12 font-bold leading-tight"></h1>
+        <h1 id="display-name" class="text-5xl md:text-7xl text-[#FF69B4] text-center mb-8 font-bold leading-tight"></h1>
 
         <div class="max-w-2xl w-full bg-white/60 backdrop-blur-lg p-8 md:p-12 rounded-[2.5rem] shadow-2xl border-l-[12px] border-[#D4AF37] relative">
             <div id="message" class="text-lg md:text-xl leading-relaxed text-gray-700 italic mb-8 min-h-[150px]"></div>
-            <p class="text-right font-bold text-[#D4AF37] tracking-widest">- Selamanya Milikmu -</p>
+            <p class="text-right font-bold text-[#D4AF37] tracking-widest text-xs">- Dari teman bertumbuhmu -</p>
         </div>
 
         <p id="instruction" class="hidden text-[10px] text-gold font-bold tracking-widest uppercase animate-bounce mt-8">Ketuk kado yang melayang! ✨</p>
@@ -223,12 +223,12 @@
                 <svg class="text-pink-400 fill-current w-16 h-16" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             </div>
         </div>
-
-        <footer class="mt-auto py-6 text-center">
-            <p class="text-[10px] text-gray-400 tracking-[0.3em] uppercase">Made with ❤️ for my beloved wife</p>
-            <p class="text-[9px] text-gray-300 mt-1 uppercase tracking-widest">© 2026 Digital Gift Experience</p>
-        </footer>
     </section>
+
+    <footer class="mt-auto py-6 text-center">
+        <p class="text-[10px] text-gray-400 tracking-[0.3em] uppercase">Made with ❤️ for my beloved wife</p>
+        <p class="text-[9px] text-gray-300 mt-1 uppercase tracking-widest">© 2026 Birthday Surprise</p>
+    </footer>
 
     <div id="voucher-modal" onclick="closeVoucher()">
         <div class="voucher-card" id="v-card" onclick="event.stopPropagation()">
@@ -236,7 +236,7 @@
             <h3 class="text-gold uppercase tracking-widest font-bold text-sm mb-2">Kamu Mendapatkan</h3>
             <p id="voucher-text" class="text-[#FF69B4] font-bold text-3xl cursive py-4"></p>
             <div class="h-[1px] w-full bg-gray-100 my-4"></div>
-            <p class="text-[10px] text-gray-400 uppercase tracking-tighter">Tunjukkan layar ini ke suami untuk klaim!</p>
+            <p class="text-[10px] text-gray-400 uppercase tracking-tighter">Tunjukkan layar ini ke pasanganmu untuk klaim!</p>
             <button onclick="closeVoucher()" class="mt-6 text-gray-400 text-xs hover:text-pink-500 transition-colors">Tutup</button>
         </div>
     </div>
@@ -247,12 +247,11 @@
 
         let targetName = "";
         const voucherList = [
-            "Pijat Punggung 30 Menit 💆‍♀️",
-            "Bebas Cuci Piring Seharian 🍽️",
-            "Makan Malam Romantis 🕯️",
-            "Saldo Jajan Tambahan 💸",
-            "Voucher Peluk Seharian 🤗",
-            "Nonton Film Pilihanmu 🎬"
+            "Voucher Makan Malam: Sushi & Ramen Date 🍣",
+            "Saldo Belanja Shopee Sebesar 500K 🛒",
+            "Full Body Massage & Spa 30 Menit 💆‍♀️",
+            "Golden Ticket: Bebas Cuci Piring Seharian 🍽️",
+            "Movie Marathon & Snack Pilihanmu 🎬"
         ];
 
         function initBackground() {
@@ -350,7 +349,7 @@
         }
 
         function finalCelebration() {
-            const end = Date.now() + (4 * 1000);
+            const end = Date.now() + (6 * 1000);
             (function frame() {
                 confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0, y: 0.8 }, colors: ['#FFB6C1', '#D4AF37'] });
                 confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1, y: 0.8 }, colors: ['#FFB6C1', '#D4AF37'] });
@@ -376,32 +375,34 @@
             type();
         }
 
-        // PERBAIKAN: Fungsi spawn kado dalam Flexbox horizontal
         function spawnGiftBoxes() {
             const container = document.getElementById('gift-container');
-            for(let j = 0; j < 5; j++) {
+            const shuffledVouchers = [...voucherList].sort(() => Math.random() - 0.5);
+
+            shuffledVouchers.forEach((voucher, j) => {
                 const gift = document.createElement('div');
                 gift.className = 'gift-box';
                 gift.innerHTML = '🎁';
                 container.appendChild(gift);
+                gift.dataset.reward = voucher;
 
-                gsap.from(gift, { scale: 0, rotation: 360, duration: 0.8, delay: j * 0.2, ease: "back.out(1.7)" });
+                gsap.from(gift, { scale: 0, rotation: 360, duration: 0.8, delay: j * 0.1, ease: "back.out(1.7)" });
                 gsap.to(gift, { y: "-=10", repeat: -1, yoyo: true, duration: 1 + (j * 0.2), ease: "power1.inOut" });
 
                 gift.onclick = (e) => openVoucher(gift, e);
-            }
+            });
         }
 
         function openVoucher(el, event) {
             confetti({ 
-                particleCount: 40, 
+                particleCount: 100, 
                 spread: 60, 
                 origin: { x: event.clientX / window.innerWidth, y: event.clientY / window.innerHeight } 
             });
             
-            const randomV = voucherList[Math.floor(Math.random() * voucherList.length)];
-            document.getElementById("voucher-text").innerText = randomV;
-            
+            const reward = el.dataset.reward;
+    
+            document.getElementById("voucher-text").innerText = reward;
             document.getElementById("voucher-modal").style.display = "flex";
             gsap.fromTo("#v-card", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" });
             
